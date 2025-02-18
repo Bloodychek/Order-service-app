@@ -14,6 +14,7 @@ import org.example.orderservice.model.OrderResponseDto;
 import org.example.orderservice.repository.OrderRepository;
 import org.example.orderservice.service.OrderService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -57,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
         String orderNumber = feignClient.generateOrderNumber();
 
