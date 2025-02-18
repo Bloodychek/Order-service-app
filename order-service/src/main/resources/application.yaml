@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: order-service
+  liquibase:
+    enabled: true
+  datasource:
+    url: jdbc:postgresql:localhost:5440
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+server:
+  port: 8081

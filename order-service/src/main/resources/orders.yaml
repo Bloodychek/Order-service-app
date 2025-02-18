@@ -1,0 +1,161 @@
+openapi: 3.0.3
+info:
+  title: Order API
+  description: API для управления заказами
+  version: 1.0.0
+
+paths:
+  /orders:
+    post:
+      summary: Создание заказа
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequestDto'
+      responses:
+        '201':
+          description: Заказ успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponseDto'
+
+  /orders/{id}:
+    get:
+      summary: Получение заказа по его идентификатору
+      operationId: getOrderById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponseDto'
+        '404':
+          description: Заказ не найден
+
+  /orders/search:
+    get:
+      summary: Поиск заказов по дате и минимальной сумме
+      operationId: getOrdersByDateAndAmount
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Дата заказа (формат YYYY-MM-DD)
+        - name: totalAmount
+          in: query
+          required: true
+          schema:
+            type: number
+          description: Минимальная сумма заказа
+      responses:
+        '200':
+          description: Список найденных заказов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponseDto'
+
+  /orders/filter:
+    get:
+      summary: Получение списка заказов, не содержащих товар и поступивших в заданный временной период
+      operationId: getOrdersByFilter
+      parameters:
+        - name: productName
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponseDto'
+
+components:
+  schemas:
+    ProductDto:
+      type: object
+      properties:
+        productSku:
+          type: integer
+        productName:
+          type: string
+        quantity:
+          type: integer
+        unitPrice:
+          type: number
+
+    OrderRequestDto:
+      type: object
+      properties:
+        recipient:
+          type: string
+        deliveryAddress:
+          type: string
+        paymentType:
+          type: string
+          enum: [ CARD, CASH ]
+        deliveryType:
+          type: string
+          enum: [ PICKUP, DOOR_DELIVERY ]
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDto'
+
+    OrderResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        orderNumber:
+          type: string
+        totalAmount:
+          type: number
+        orderDate:
+          type: string
+          format: date
+        recipient:
+          type: string
+        deliveryAddress:
+          type: string
+        paymentType:
+          type: string
+        deliveryType:
+          type: string
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDto'

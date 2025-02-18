@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Evgeniy
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: order_number
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total_amount
+                  type: DECIMAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recipient
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: delivery_address
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payment_type
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: delivery_type
+                  type: VARCHAR
+                  constraints:
+                    nullable: false

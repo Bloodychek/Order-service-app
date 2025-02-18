@@ -1,0 +1,10 @@
+services:
+  master:
+    image: bitnami/postgresql:16.3.0
+    container_name: order-service
+    ports:
+      - "5440:5432"
+    environment:
+      POSTGRES_DB: order-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres

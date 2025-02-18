@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Управление заказами</h1>
+
+<!-- Форма поиска заказа по ID -->
+<div>
+    <h2>Получение заказа по его идентификатору</h2>
+    <form th:action="@{/orders/{id}}" method="get">
+        <label for="orderId">ID заказа:</label>
+        <input type="number" id="orderId" name="id" required>
+        <button type="submit">Найти</button>
+    </form>
+</div>
+
+<!-- Форма поиска заказа по дате и сумме -->
+<div>
+    <h2>Получение заказа за заданную дату и больше заданной общей суммы заказа</h2>
+    <form th:action="@{/orders/filter}" method="get">
+        <label for="orderDate">Дата заказа:</label>
+        <input type="date" id="orderDate" name="date" required>
+
+        <label for="totalAmount">Общая сумма заказа:</label>
+        <input type="number" step="0.01" id="totalAmount" name="totalAmount" required>
+
+        <button type="submit">Поиск</button>
+    </form>
+</div>
+
+<!-- Форма поиска заказов без определенного товара в периоде -->
+<div>
+    <h2>Получение списка заказов, не содержащих заданный товар и поступивших в заданный временной период</h2>
+    <form th:action="@{/orders/search}" method="get">
+        <label for="productName">Название товара:</label>
+        <input type="text" id="productName" name="productName" required>
+
+        <label for="startDate">Начальная дата:</label>
+        <input type="date" id="startDate" name="startDate" required>
+
+        <label for="endDate">Конечная дата:</label>
+        <input type="date" id="endDate" name="endDate" required>
+
+        <button type="submit">Найти</button>
+    </form>
+</div>
+
+<!-- Вывод информации о заказе -->
+<div th:if="${order}">
+    <h2>Информация о заказе</h2>
+    <p><strong>ID:</strong> <span th:text="${order.id}"></span></p>
+    <p><strong>Номер заказа:</strong> <span th:text="${order.orderNumber}"></span></p>
+    <p><strong>Сумма:</strong> <span th:text="${order.totalAmount}"></span></p>
+    <p><strong>Дата:</strong> <span th:text="${order.orderDate}"></span></p>
+    <p><strong>Получатель:</strong> <span th:text="${order.recipient}"></span></p>
+    <p><strong>Адрес доставки:</strong> <span th:text="${order.deliveryAddress}"></span></p>
+    <p><strong>Тип оплаты:</strong> <span th:text="${order.paymentType}"></span></p>
+    <p><strong>Тип доставки:</strong> <span th:text="${order.deliveryType}"></span></p>
+
+    <h3>Товары:</h3>
+    <ul>
+        <li th:each="product : ${order.products}">
+            <span th:text="${product.name}"></span> -
+            <span th:text="${product.price}"></span> $
+        </li>
+    </ul>
+</div>
+
+<!-- Вывод списка заказов -->
+<div th:if="${orders}">
+    <h2>Список заказов</h2>
+    <ul>
+        <li th:each="order : ${orders}">
+            <a th:href="@{/orders/{id}(id=${order.id})}">
+                <span th:text="${order.orderNumber}"></span>
+            </a> - <span th:text="${order.totalAmount}"></span> $
+        </li>
+    </ul>
+</div>
+</body>
+</html>

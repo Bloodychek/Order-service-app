@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: generate-number-service
+  liquibase:
+    enabled: true
+  datasource:
+    url: jdbc:postgresql:localhost:5439
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver

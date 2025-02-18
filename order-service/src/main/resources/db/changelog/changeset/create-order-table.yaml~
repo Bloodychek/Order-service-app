@@ -1,0 +1,11 @@
+CREATE TABLE orders
+(
+    id               BIGSERIAL PRIMARY KEY,
+    order_number     VARCHAR NOT NULL,
+    total_amount     DECIMAL NOT NULL,
+    order_date       DATE    NOT NULL,
+    recipient        VARCHAR NOT NULL,
+    delivery_address VARCHAR NOT NULL,
+    payment_type     VARCHAR NOT NULL,
+    delivery_type    VARCHAR NOT NULL
+);
