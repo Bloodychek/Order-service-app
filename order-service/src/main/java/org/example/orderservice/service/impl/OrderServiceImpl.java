@@ -13,6 +13,7 @@ import org.example.orderservice.model.OrderRequestDto;
 import org.example.orderservice.model.OrderResponseDto;
 import org.example.orderservice.repository.OrderRepository;
 import org.example.orderservice.service.OrderService;
+import org.example.orderservice.util.exception.OrderException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto findOrderById(Integer id) {
         Order order = orderRepository.findById(Long.valueOf(id))
-                .orElseThrow(() -> new RuntimeException("Заказ не найден"));
+                .orElseThrow(() -> new OrderException("Заказ не найден"));
         return orderMapper.toDto(order);
     }
 
@@ -45,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderRepository.getOrderForDateAndGreaterThanTotalOrderAmount(date, totalAmount);
 
         if (orders.isEmpty()) {
-            throw new RuntimeException("Заказы на указанную дату и сумму не найдены");
+            throw new OrderException("Заказы на указанную дату и сумму не найдены");
         }
 
         return orders.stream()
@@ -56,6 +57,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponseDto> findOrdersNotContainingProductNameInDateRange(String productName, LocalDate startDate, LocalDate endDate) {
         List<Order> orders = orderRepository.findOrdersNotContainingProductNameInDateRange(productName, startDate, endDate);
+
+        if (orders.isEmpty()) {
+            throw new OrderException("Заказ не найден");
+        }
+
         return orders.stream()
                 .map(orderMapper::toDto)
                 .collect(Collectors.toList());
@@ -70,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
             JsonNode jsonNode = objectMapper.readTree(orderNumber);
             orderNumber = jsonNode.get("number").asText();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Ошибка парсинга orderNumber", e);
+            throw new OrderException("Ошибка парсинга");
         }
 
         Order order = orderMapper.toEntity(orderRequestDto);
@@ -83,8 +89,12 @@ public class OrderServiceImpl implements OrderService {
 
         order.setTotalAmount(totalAmount);
 
-        order = orderRepository.save(order);
+        try {
+            order = orderRepository.save(order);
+        } catch (Exception e) {
+            throw new OrderException("Не удалось создать заказ");
+        }
+
         return orderMapper.toDto(order);
     }
-
 }
