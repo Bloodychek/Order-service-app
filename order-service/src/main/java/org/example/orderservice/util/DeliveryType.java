@@ -3,6 +3,10 @@ package org.example.orderservice.util;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * Класс-enum для определения типа доставки
+ */
+
 @AllArgsConstructor
 @Getter
 public enum DeliveryType {

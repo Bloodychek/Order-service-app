@@ -1,7 +1,7 @@
 services:
-  master:
+  generate-db:
     image: bitnami/postgresql:16.3.0
-    container_name: generate-number-service
+    container_name: generate-number-db
     ports:
       - "5439:5432"
     environment:

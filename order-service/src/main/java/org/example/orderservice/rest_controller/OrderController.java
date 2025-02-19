@@ -16,6 +16,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Класс-контроллер для работы с заказами
+ */
+
 @RestController
 @RequiredArgsConstructor
 public class OrderController implements OrdersApi {

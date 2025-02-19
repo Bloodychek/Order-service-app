@@ -15,6 +15,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
+/**
+ * Класс-entity заказа
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor

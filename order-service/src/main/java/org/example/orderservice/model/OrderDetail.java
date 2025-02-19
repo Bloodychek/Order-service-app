@@ -10,6 +10,10 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.math.BigDecimal;
 
+/**
+ * Класс-entity деталей заказа
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor

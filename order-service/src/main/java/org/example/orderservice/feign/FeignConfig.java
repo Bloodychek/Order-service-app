@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Configuration;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+/**
+ * Класс конфигурации Feign
+ */
+
 @Configuration
 public class FeignConfig {
     @Bean

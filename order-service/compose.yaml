@@ -1,10 +1,60 @@
+version: "3.8"
+
+networks:
+  my-network:
+    driver: bridge
+
 services:
-  master:
+  generate-db:
     image: bitnami/postgresql:16.3.0
-    container_name: order-service
+    container_name: generate-number-db
+    networks:
+      - my-network
+    ports:
+      - "5439:5432"
+    environment:
+      POSTGRES_DB: generate-number-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  generate-number-service:
+    build:
+      context: ../generate-number-service
+      dockerfile: Dockerfile
+    container_name: generate-number-service
+    networks:
+      - my-network
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://generate-db:5432/generate-number-service
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  order-db:
+    image: bitnami/postgresql:16.3.0
+    container_name: order-service-db
+    networks:
+      - my-network
     ports:
       - "5440:5432"
     environment:
       POSTGRES_DB: order-service
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+
+  order-service:
+    build:
+      context: ../order-service
+      dockerfile: Dockerfile
+    container_name: order-service
+    networks:
+      - my-network
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://order-db:5432/order-service
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      NUMBER_SERVICE_URL: http://generate-number-service:8080/

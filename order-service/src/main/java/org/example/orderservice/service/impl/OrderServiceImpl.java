@@ -21,6 +21,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Реализация сервиса заказа
+ */
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -73,9 +77,8 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderNumber(orderNumber);
         order.setOrderDate(LocalDate.now());
 
-        // Вычисляем totalAmount, суммируя стоимость всех товаров
         BigDecimal totalAmount = order.getOrderDetails().stream()
-                .map(OrderDetail::getTotalPrice) // Предполагается, что OrderDetail имеет метод getTotalPrice()
+                .map(OrderDetail::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         order.setTotalAmount(totalAmount);

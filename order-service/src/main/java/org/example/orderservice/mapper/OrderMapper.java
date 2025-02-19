@@ -10,6 +10,10 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
+/**
+ * Маппер для работы с заказами
+ */
+
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
 

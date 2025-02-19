@@ -4,7 +4,7 @@ spring:
   liquibase:
     enabled: true
   datasource:
-    url: jdbc:postgresql:localhost:5440
+    url: jdbc:postgresql://order-db:5432/order-service
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
